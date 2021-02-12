@@ -10,7 +10,7 @@ taquin.o: taquin.c
 	gcc -c taquin.c -lm
 
 taquin: taquin.o board.o list.o board.h list.h item.h
-	gcc -o taquin taquin.o board.o list.o -lm
+	gcc -O2 -o taquin taquin.o board.o list.o -lm
 	./taquin
 
 

@@ -7,8 +7,6 @@
 #include "list.h"
 #include "board.h"
 
-list_t openList_p;
-list_t closedList_p;
 list_t frontier;
 list_t explored;
 
@@ -54,12 +52,11 @@ void UCS(void)
 				child_p = getChildBoard(cur_node, i);
 				if (child_p != NULL)
 				{
-					child_p->f = child_p->depth;
 
 					temp = onList(&frontier, child_p->board);
 					if (temp)
 					{
-			
+
 						if (temp->f > child_p->f)
 						{
 							delList(&frontier, temp);
@@ -124,8 +121,6 @@ double getManhatanh(Item *node)
 
 		double dist = sqrt(pow(x, 2) + pow(y, 2));
 		h = h + dist;
-		// while(check[j]!=board[i])
-		// 	j++;
 	}
 
 	return h;
@@ -139,14 +134,16 @@ void Aetoile(void)
 
 	while (listCount(&frontier))
 	{
+		// printf("Size of open list = %d\n", frontier.numElements);
+		// printf("Size of closed list = %d\n", explored.numElements);
 		cur_node = popBest(&frontier);
+	
 		//si c'est le bon noeud
 		if (evaluateBoard(cur_node) == 0.0)
 		{
 			showSolution(cur_node);
 			return;
 		}
-
 		if (!onList(&explored, cur_node->board))
 		{
 			addLast(&explored, cur_node);
@@ -156,16 +153,13 @@ void Aetoile(void)
 				if (child_p != NULL)
 				{
 
-					//calcul coût du noeud
-					child_p->g = child_p->depth;
-					//child_p->h=getsimpleh(child_p);
-					child_p->h = getManhatanh(child_p);
-					child_p->f = (child_p->g) + (child_p->h);
-
 					temp = onList(&frontier, child_p->board);
 					if (temp)
 					{
-						//printf("squalalala 1\n");
+						//child_p->h=getsimpleh(child_p);
+						child_p->h = getManhatanh(child_p);
+						child_p->f = (child_p->g) + (child_p->h);
+
 						if (temp->f > child_p->f)
 						{
 							delList(&frontier, temp);
@@ -174,7 +168,6 @@ void Aetoile(void)
 					}
 					if (!onList(&explored, child_p->board))
 					{
-						//printf("squalalala 2\n");
 						addLast(&frontier, child_p);
 					}
 					// else
@@ -190,21 +183,19 @@ void Aetoile(void)
 int main()
 {
 	/* init lists */
-	initList(&openList_p);
-	initList(&closedList_p);
+	initList(&frontier);
+	initList(&explored);
 
-	// printList(openList_p);
+	// printList(frontier);
 
 	printf("\nInitial:");
-	Node initial_state = initGame(1);
+	Node initial_state = initGame(3);
 	printBoard(initial_state);
 
 	printf("\nSearching ...\n");
 
-	addLast(&openList_p, initial_state);
-
-	printList(openList_p);
-	// printList(closedList_p);
+	printList(frontier);
+	// printList(explored);
 
 	initial_state->f = 0.0;
 	addLast(&frontier, initial_state);
@@ -213,8 +204,6 @@ int main()
 	printf("Finished!\n");
 
 	/* clean lists */
-	cleanupList(&openList_p);
-	cleanupList(&closedList_p);
 	cleanupList(&frontier);
 	cleanupList(&explored);
 

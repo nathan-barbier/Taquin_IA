@@ -61,8 +61,8 @@ Item *onList(list_t *list, char *board)
 {
 	Item *pitem; //pointeur de noeud
 	int i, diff;
-	pitem = list->first;		//pointe sur le 1er el de la liste
-	if(list->first==NULL)
+	pitem = list->first; //pointe sur le 1er el de la liste
+	if (list->first == NULL)
 		return NULL;
 	while (pitem->next != NULL) //tant que fin liste non atteinte
 	{
@@ -147,13 +147,19 @@ Item *popBest(list_t *list) // and remove the best board from the list.
 {
 	assert(list);
 
-	Item *list_min=list->first, *i=list->first;
-	
-	while(i->next){
-		i=i->next;
-		if(list_min->f>=i->f)
-			list_min=i;	
+	Item *list_min = list->first, *i = list->first;
+
+	// printf("In\n");
+
+	while (i->next)
+	{
+		i = i->next;
+		if (list_min->f >= i->f)
+			list_min = i;
 	}
+
+	// printf("Out\n");
+	// printf("Best : %e\n", list_min->f);
 	delList(list, list_min);
 	return list_min;
 }
@@ -197,7 +203,6 @@ void addLast(list_t *list, Item *node) // add in tail
 		list->last = node;		   //placer le pointeur vers le dernier el de la liste sur node
 	}
 	(list->numElements)++; //incrementer le nombre de el de la liste
-	
 }
 
 //fonction qui nettoie une liste

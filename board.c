@@ -5,7 +5,6 @@
 #include <math.h>
 #include "board.h"
 
-
 #include <string.h>
 
 // Initialize a new Game for the nQueens problem: an empty board..
@@ -13,35 +12,36 @@ Node initGame(int choice)
 {
 	int i, temp;
 	Node node;
-	char * diff;
-	char easy[MAX_BOARD]={1, 2, 5, 3, 0, 4, 7, 8, 6};
-	char moy[MAX_BOARD]={7, 4, 8, 2, 5, 6, 3, 1, 0};
-	char hard[MAX_BOARD]={8, 0, 7, 5, 6, 1, 3, 2, 4};
+	char *diff;
+	char easy[MAX_BOARD] = {1, 2, 5, 3, 0, 4, 7, 8, 6};
+	char moy[MAX_BOARD] = {7, 4, 8, 2, 5, 6, 3, 1, 0};
+	char hard[MAX_BOARD] = {8, 0, 7, 5, 6, 1, 3, 2, 4};
 
 	switch (choice)
 	{
 	case 1:
-		diff=easy;
+		diff = easy;
 		break;
-	
+
 	case 2:
-		diff=moy;
+		diff = moy;
 		break;
-	
+
 	case 3:
-		diff=hard;
+		diff = hard;
 		break;
 
 	default:
-		diff=hard;
+		diff = hard;
 		break;
 	}
 
 	char *initial = (char *)malloc(MAX_BOARD * sizeof(char));
-	for (int i = 0; i < MAX_BOARD; i++){
+	for (int i = 0; i < MAX_BOARD; i++)
+	{
 		initial[i] = diff[i];
-		if(initial[i]==0)
-			temp=i;
+		if (initial[i] == 0)
+			temp = i;
 	}
 
 	node = nodeAlloc();
@@ -49,7 +49,7 @@ Node initGame(int choice)
 	initBoard(node, initial);
 
 	node->depth = 0;
-	node->blank=temp;
+	node->blank = temp;
 
 	return node;
 }
@@ -98,7 +98,7 @@ void initBoard(Node node, char *board)
 
 	/* Copy board */
 
-	for (int i =0; i < MAX_BOARD; i++)
+	for (int i = 0; i < MAX_BOARD; i++)
 	{
 		node->board[i] = board[i];
 	}
@@ -109,12 +109,13 @@ void initBoard(Node node, char *board)
 double evaluateBoard(Node node)
 {
 	int cost = 9;
-	char check[MAX_BOARD]={1, 2, 3, 4, 5, 6, 7, 8, 0};
+	char check[MAX_BOARD] = {1, 2, 3, 4, 5, 6, 7, 8, 0};
 	char *board = node->board;
 
-	for(int i=0; i<MAX_BOARD; i++){
-		if(board[i]==check[i])
-			cost=cost-1;
+	for (int i = 0; i < MAX_BOARD; i++)
+	{
+		if (board[i] == check[i])
+			cost = cost - 1;
 	}
 	return cost;
 }
@@ -123,28 +124,29 @@ double evaluateBoard(Node node)
 
 int isValidPosition(Node node, int pos)
 {
-	#define MAX_VECTOR  4
-	typedef struct{
-		int len; //nd de mouv possible 
+#define MAX_VECTOR 4
+	typedef struct
+	{
+		int len;						//nd de mouv possible
 		unsigned int valid[MAX_VECTOR]; //case ou on peut se déplacer
 	} move_t;
 
 	const move_t moves[MAX_BOARD] = {
-		/* 0 */{ 2, {1, 3}       },
-		/* 1 */{ 3, {0, 2, 4}    },
-		/* 2 */{ 2, {1, 5}       },
-		/* 3 */{ 3, {0, 4, 6}    },
-		/* 4 */{ 4, {1, 3, 5, 7} },
-		/* 5 */{ 3, {2, 4, 8}    },
-		/* 6 */{ 2, {3, 7}       },
-		/* 7 */{ 3, {4, 6, 8}    },
-		/* 8 */{ 2, {5, 7}       }
-	};
-	
+		/* 0 */ {2, {1, 3}},
+		/* 1 */ {3, {0, 2, 4}},
+		/* 2 */ {2, {1, 5}},
+		/* 3 */ {3, {0, 4, 6}},
+		/* 4 */ {4, {1, 3, 5, 7}},
+		/* 5 */ {3, {2, 4, 8}},
+		/* 6 */ {2, {3, 7}},
+		/* 7 */ {3, {4, 6, 8}},
+		/* 8 */ {2, {5, 7}}};
+
 	//position du blanc
-	int posblank=node->blank;
-	for(int i=0; i<moves[posblank].len; i++){
-		if(pos==moves[posblank].valid[i])
+	int posblank = node->blank;
+	for (int i = 0; i < moves[posblank].len; i++)
+	{
+		if (pos == moves[posblank].valid[i])
 			return 1;
 	}
 	return 0;
@@ -155,7 +157,7 @@ Node getChildBoard(Node node, int pos)
 {
 	int temp;
 	Node child_p = NULL;
-	printf("depth node = %d\n", node->depth);
+
 	if (isValidPosition(node, pos))
 	{
 		/* allocate and init child node */
@@ -164,16 +166,20 @@ Node getChildBoard(Node node, int pos)
 
 		/* Make move (On place une nouvelle reine)*/
 		// Est ce qu'on doit vérifier avec evaluateBoard si les reines sont déjà placées ?
-		temp=child_p->board[pos];
+		temp = child_p->board[pos];
 		child_p->board[pos] = 0;
-		child_p->board[node->blank]=temp;
-		
-		child_p->blank=pos;
+		child_p->board[node->blank] = temp;
+
+		child_p->blank = pos;
 		/* link child to parent for backtrack */
 		child_p->parent = node;
-		
+
 		child_p->depth = (child_p->parent)->depth + 1;
-		printf("depth child = %d\n", child_p->depth);
+		//calcul coût du noeud
+		child_p->g = child_p->depth;
+		
+		
+		child_p->f = (child_p->g) + (child_p->h);
 	}
 
 	return child_p;
