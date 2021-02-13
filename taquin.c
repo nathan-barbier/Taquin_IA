@@ -130,7 +130,6 @@ double getManhatanh(Item *node)
 void Aetoile(void)
 {
 	Item *cur_node, *child_p, *temp;
-	int i;
 
 	while (listCount(&frontier))
 	{
@@ -138,43 +137,42 @@ void Aetoile(void)
 		// printf("Size of closed list = %d\n", explored.numElements);
 		cur_node = popBest(&frontier);
 	
+		addLast(&explored, cur_node);
+
 		//si c'est le bon noeud
-		if (evaluateBoard(cur_node) == 0.0)
+		if (evaluateBoard(cur_node) == 0)
 		{
 			showSolution(cur_node);
 			return;
 		}
-		if (!onList(&explored, cur_node->board))
+
+
+		
+		for (int i = 0; i < MAX_BOARD; i++)
 		{
-			addLast(&explored, cur_node);
-			for (int i = 0; i < MAX_BOARD; i++)
+			child_p = getChildBoard(cur_node, i);
+			if (child_p != NULL && onList(&explored, child_p->board)==NULL)
 			{
-				child_p = getChildBoard(cur_node, i);
-				if (child_p != NULL)
+				temp = onList(&frontier, child_p->board);
+				child_p->h=getsimpleh(child_p);
+				//child_p->h = getManhatanh(child_p);
+				child_p->f = (child_p->g) + (child_p->h);
+				if (temp)
 				{
-
-					temp = onList(&frontier, child_p->board);
-					if (temp)
+					
+					if (temp->f > child_p->f)
 					{
-						//child_p->h=getsimpleh(child_p);
-						child_p->h = getManhatanh(child_p);
-						child_p->f = (child_p->g) + (child_p->h);
-
-						if (temp->f > child_p->f)
-						{
-							delList(&frontier, temp);
-							addLast(&frontier, child_p);
-						}
-					}
-					if (!onList(&explored, child_p->board))
-					{
+						//printf("remplace\n");
+						delList(&frontier, temp);
 						addLast(&frontier, child_p);
+						//printf("remplace out\n");
 					}
-					// else
-					// {
-					// 	addLast(&frontier,child_p);
-					// }
 				}
+				if (onList(&frontier, child_p->board)==NULL)
+				{
+					addLast(&frontier, child_p);
+				}
+				
 			}
 		}
 	}
@@ -189,7 +187,7 @@ int main()
 	// printList(frontier);
 
 	printf("\nInitial:");
-	Node initial_state = initGame(3);
+	Node initial_state = initGame(1);
 	printBoard(initial_state);
 
 	printf("\nSearching ...\n");
@@ -199,7 +197,7 @@ int main()
 
 	initial_state->f = 0.0;
 	addLast(&frontier, initial_state);
-	// UCS();
+	//UCS();
 	Aetoile();
 	printf("Finished!\n");
 

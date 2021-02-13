@@ -64,7 +64,7 @@ Item *onList(list_t *list, char *board)
 	pitem = list->first; //pointe sur le 1er el de la liste
 	if (list->first == NULL)
 		return NULL;
-	while (pitem->next != NULL) //tant que fin liste non atteinte
+	for(int j=0; j<list->numElements; j++) //tant que fin liste non atteinte
 	{
 		i = 0;
 		diff = 0;
