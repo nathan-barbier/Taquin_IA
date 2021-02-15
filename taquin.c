@@ -7,8 +7,8 @@
 #include "list.h"
 #include "board.h"
 
-list_t frontier;
-list_t explored;
+list_t frontier; // open list (noeuds qui vont être évaluer)
+list_t explored; // closed list (noeuds déjà évaluer)
 
 void showSolution(Node goal)
 {
@@ -67,10 +67,7 @@ void UCS(void)
 					{
 						addLast(&frontier, child_p);
 					}
-					// else
-					// {
-					// 	addLast(&frontier,child_p);
-					// }
+
 				}
 			}
 		}
@@ -102,23 +99,28 @@ double getManhatanh(Item *node)
 	// char check[MAX_BOARD]={1, 2, 3, 4, 5, 6, 7, 8, 0};
 	char *board = node->board;
 
+	// pour toutes les cases du plateau
 	for (int i = 0; i < MAX_BOARD; i++)
 	{
 		int j;
+		// indique case correspondante dans la solution
 		if (board[i] == 0)
 			j = 8;
 		else
 			j = board[i] - 1;
 
+		// coord de la case
 		double x1 = (i / WH_BOARD);
 		double y1 = (i % WH_BOARD);
 
+		// coord de la solution
 		double x2 = (j / WH_BOARD);
 		double y2 = (j % WH_BOARD);
 
 		double x = x1 - x2;
 		double y = y1 - y2;
 
+		// calcul distance
 		double dist = sqrt(pow(x, 2) + pow(y, 2));
 		h = h + dist;
 	}
@@ -130,13 +132,16 @@ double getManhatanh(Item *node)
 void Aetoile(void)
 {
 	Item *cur_node, *child_p, *temp;
+	// cur_node : noeud évalué
 
+	//tant qu'il reste des noeuds à évaluer
 	while (listCount(&frontier))
 	{
-		// printf("Size of open list = %d\n", frontier.numElements);
-		// printf("Size of closed list = %d\n", explored.numElements);
+
+		// sort le noeud avec f minimum de open list
 		cur_node = popBest(&frontier);
 	
+		// ajouter à closed list
 		addLast(&explored, cur_node);
 
 		//si c'est le bon noeud
@@ -147,29 +152,34 @@ void Aetoile(void)
 		}
 
 
-		
+		// pour tous les voisins de cur_node
 		for (int i = 0; i < MAX_BOARD; i++)
 		{
 			child_p = getChildBoard(cur_node, i);
+			// si il est possible et non exploré
 			if (child_p != NULL && onList(&explored, child_p->board)==NULL)
 			{
+				// vérifier s'il permet un plus court chemin sur un plateau
 				temp = onList(&frontier, child_p->board);
+				//calcul de l'heuristique
 				child_p->h=getsimpleh(child_p);
 				//child_p->h = getManhatanh(child_p);
+				// calcul coût totale (g est la pronfondeur nb de mouvements)
 				child_p->f = (child_p->g) + (child_p->h);
 				if (temp)
 				{
-					
+					// si le chemin est plus court
 					if (temp->f > child_p->f)
 					{
-						//printf("remplace\n");
+						// remplacer temp par child_p
 						delList(&frontier, temp);
 						addLast(&frontier, child_p);
-						//printf("remplace out\n");
 					}
 				}
+				// si child_p n'est pas dans open list 
 				if (onList(&frontier, child_p->board)==NULL)
 				{
+					// le mettre
 					addLast(&frontier, child_p);
 				}
 				

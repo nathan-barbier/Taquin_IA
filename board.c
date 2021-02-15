@@ -7,16 +7,19 @@
 
 #include <string.h>
 
-// Initialize a new Game for the nQueens problem: an empty board..
+// Initialize a new Game for the Taquin problem
 Node initGame(int choice)
 {
 	int i, temp;
 	Node node;
 	char *diff;
+
+	// 3 diff possibles
 	char easy[MAX_BOARD] = {1, 2, 5, 3, 0, 4, 7, 8, 6};
 	char moy[MAX_BOARD] = {7, 4, 8, 2, 5, 6, 3, 1, 0};
 	char hard[MAX_BOARD] = {8, 0, 7, 5, 6, 1, 3, 2, 4};
 
+	// change de diff selon le choix fait
 	switch (choice)
 	{
 	case 1:
@@ -31,12 +34,13 @@ Node initGame(int choice)
 		diff = hard;
 		break;
 
-	default:
+	default: // difficulté par défault hard
 		diff = hard;
 		break;
 	}
 
-	char *initial = (char *)malloc(MAX_BOARD * sizeof(char));
+	// initialise plateau
+	char *initial = (char *)malloc(MAX_BOARD * sizeof(char)); // plateau initiale
 	for (int i = 0; i < MAX_BOARD; i++)
 	{
 		initial[i] = diff[i];
@@ -51,7 +55,7 @@ Node initGame(int choice)
 	node->depth = 0;
 	node->blank = temp;
 
-	return node;
+	return node; // retourne le noeud initiale
 }
 
 // print a board
@@ -131,6 +135,7 @@ int isValidPosition(Node node, int pos)
 		unsigned int valid[MAX_VECTOR]; //case ou on peut se déplacer
 	} move_t;
 
+	// tab des mouvements possibles
 	const move_t moves[MAX_BOARD] = {
 		/* 0 */ {2, {1, 3}},
 		/* 1 */ {3, {0, 2, 4}},

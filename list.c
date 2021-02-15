@@ -68,9 +68,7 @@ Item *onList(list_t *list, char *board)
 	{
 		i = 0;
 		diff = 0;
-		// if(strncmp(pitem->board, board, pitem->size)==0){ //si item trouvé
-		// 	return pitem;
-		// }
+
 		//compare le board de l'item au board
 		while (i < pitem->size && diff == 0)
 		{
@@ -81,7 +79,8 @@ Item *onList(list_t *list, char *board)
 			}
 			i++;
 		}
-		//sinon renvoyé pitem
+
+		// si diff == 0 renvoyé pitem
 		if (diff == 0)
 			return pitem;
 		pitem = pitem->next;
