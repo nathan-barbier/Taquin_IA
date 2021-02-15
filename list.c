@@ -233,6 +233,7 @@ void printList(list_t list)
 	printf(" (nb_items: %d)\n", list.numElements);
 }
 
+
 // TEST LIST
 //gcc list.c -o list
 /*
