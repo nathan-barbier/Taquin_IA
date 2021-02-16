@@ -7,8 +7,8 @@
 #include "list.h"
 #include "board.h"
 
-list_t frontier; // open list (noeuds qui vont être évaluer)
-list_t explored; // closed list (noeuds déjà évaluer)
+list_t openList; // open list (noeuds qui vont être évaluer)
+list_t closedList; // closed list (noeuds déjà évaluer)
 
 void showSolution(Node goal)
 {
@@ -24,8 +24,8 @@ void showSolution(Node goal)
 	}
 
 	printf("\nLength of the solution = %d\n", i - 1);
-	printf("Size of open list = %d\n", frontier.numElements);
-	printf("Size of closed list = %d\n", explored.numElements);
+	printf("Size of open list = %d\n", openList.numElements);
+	printf("Size of closed list = %d\n", closedList.numElements);
 	return;
 }
 
@@ -33,37 +33,37 @@ void UCS(void)
 {
 	Item *cur_node, *child_p, *temp;
 
-	while (listCount(&frontier))
+	while (listCount(&openList))
 	{
-		cur_node = popBest(&frontier);
+		cur_node = popBest(&openList);
 		//si c'est le bon noeud
 		if (evaluateBoard(cur_node) == 0.0)
 		{
 			showSolution(cur_node);
 			return;
 		}
-		if (!onList(&explored, cur_node->board))
+		if (!onList(&closedList, cur_node->board))
 		{
-			addLast(&explored, cur_node);
+			addLast(&closedList, cur_node);
 			for (int i = 0; i < MAX_BOARD; i++)
 			{
 				child_p = getChildBoard(cur_node, i);
 				if (child_p != NULL)
 				{
 
-					temp = onList(&frontier, child_p->board);
+					temp = onList(&openList, child_p->board);
 					if (temp)
 					{
 
 						if (temp->f > child_p->f)
 						{
-							delList(&frontier, temp);
-							addLast(&frontier, child_p);
+							delList(&openList, temp);
+							addLast(&openList, child_p);
 						}
 					}
-					if (!onList(&explored, child_p->board))
+					if (!onList(&closedList, child_p->board))
 					{
-						addLast(&frontier, child_p);
+						addLast(&openList, child_p);
 					}
 
 				}
@@ -133,14 +133,14 @@ void Aetoile(void)
 	// cur_node : noeud évalué
 
 	//tant qu'il reste des noeuds à évaluer
-	while (listCount(&frontier))
+	while (listCount(&openList))
 	{
 
 		// sort le noeud avec f minimum de open list
-		cur_node = popBest(&frontier);
+		cur_node = popBest(&openList);
 	
 		// ajouter à closed list
-		addLast(&explored, cur_node);
+		addLast(&closedList, cur_node);
 
 		//si c'est le bon noeud
 		if (evaluateBoard(cur_node) == 0)
@@ -155,10 +155,10 @@ void Aetoile(void)
 		{
 			child_p = getChildBoard(cur_node, i);
 			// si il est possible et non exploré
-			if (child_p != NULL && onList(&explored, child_p->board)==NULL)
+			if (child_p != NULL && onList(&closedList, child_p->board)==NULL)
 			{
 				// vérifier s'il permet un plus court chemin sur un plateau
-				temp = onList(&frontier, child_p->board);
+				temp = onList(&openList, child_p->board);
 				//calcul de l'heuristique
 				child_p->h=getsimpleh(child_p);
 				//child_p->h = getManhatanh(child_p);
@@ -170,15 +170,15 @@ void Aetoile(void)
 					if (temp->f > child_p->f)
 					{
 						// remplacer temp par child_p
-						delList(&frontier, temp);
-						addLast(&frontier, child_p);
+						delList(&openList, temp);
+						addLast(&openList, child_p);
 					}
 				}
 				// si child_p n'est pas dans open list 
-				if (onList(&frontier, child_p->board)==NULL)
+				if (onList(&openList, child_p->board)==NULL)
 				{
 					// le mettre
-					addLast(&frontier, child_p);
+					addLast(&openList, child_p);
 				}
 				
 			}
@@ -190,10 +190,10 @@ void Aetoile(void)
 int main()
 {
 	/* init lists */
-	initList(&frontier);
-	initList(&explored);
+	initList(&openList);
+	initList(&closedList);
 
-	// printList(frontier);
+	// printList(openList);
 
 	printf("\nInitial:");
 	Node initial_state = initGame(2);
@@ -201,8 +201,8 @@ int main()
 
 	printf("\nSearching ...\n");
 
-	printList(frontier);
-	// printList(explored);
+	printList(openList);
+	// printList(closedList);
 
 	clock_t start, end;
 	double cpu_time_used;
@@ -210,7 +210,7 @@ int main()
 	start = clock();
 
 	initial_state->f = 0.0;
-	addLast(&frontier, initial_state);
+	addLast(&openList, initial_state);
 	// UCS();
 	Aetoile();
 
@@ -219,8 +219,8 @@ int main()
 	printf("Finished in %f seconds!\n", cpu_time_used);
 
 	/* clean lists */
-	cleanupList(&frontier);
-	cleanupList(&explored);
+	cleanupList(&openList);
+	cleanupList(&closedList);
 
 	return 0;
 }
