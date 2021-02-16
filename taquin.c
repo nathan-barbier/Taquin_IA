@@ -12,8 +12,7 @@ list_t explored; // closed list (noeuds déjà évaluer)
 
 void showSolution(Node goal)
 {
-	int i = 0,
-		j;
+	int i = 0;
 
 	printf("\nSolution:");
 
@@ -33,7 +32,6 @@ void showSolution(Node goal)
 void UCS(void)
 {
 	Item *cur_node, *child_p, *temp;
-	int i;
 
 	while (listCount(&frontier))
 	{
@@ -198,7 +196,7 @@ int main()
 	// printList(frontier);
 
 	printf("\nInitial:");
-	Node initial_state = initGame(1);
+	Node initial_state = initGame(2);
 	printBoard(initial_state);
 
 	printf("\nSearching ...\n");
@@ -206,11 +204,19 @@ int main()
 	printList(frontier);
 	// printList(explored);
 
+	clock_t start, end;
+	double cpu_time_used;
+
+	start = clock();
+
 	initial_state->f = 0.0;
 	addLast(&frontier, initial_state);
-	//UCS();
+	// UCS();
 	Aetoile();
-	printf("Finished!\n");
+
+	end = clock();
+	cpu_time_used = ((double)(end - start)) / CLOCKS_PER_SEC;
+	printf("Finished in %f seconds!\n", cpu_time_used);
 
 	/* clean lists */
 	cleanupList(&frontier);

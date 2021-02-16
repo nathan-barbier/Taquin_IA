@@ -10,7 +10,7 @@
 // Initialize a new Game for the Taquin problem
 Node initGame(int choice)
 {
-	int i, temp;
+	int temp;
 	Node node;
 	char *diff;
 
