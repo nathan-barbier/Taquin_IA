@@ -1,16 +1,19 @@
+CC = gcc
+CCOPTS = -Wall
+
 all: taquin
 
 list.o: list.c list.h
-	gcc -c list.c
+	${CC} ${CCOPTS} -c list.c
 
 board.o: board.c board.h
-	gcc -c board.c
+	${CC} ${CCOPTS} -c board.c
 
 taquin.o: taquin.c
-	gcc -c taquin.c -lm
+	${CC} ${CCOPTS} -c taquin.c -lm
 
 taquin: taquin.o board.o list.o board.h list.h item.h
-	gcc -O2 -o taquin taquin.o board.o list.o -lm
+	${CC} ${CCOPTS} -o taquin taquin.o board.o list.o -lm
 	./taquin
 
 
