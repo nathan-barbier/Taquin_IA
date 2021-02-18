@@ -21,17 +21,7 @@ Item *nodeAlloc()
 	return node;
 }
 
-// Item *newnode(Item newparent, Item newnext, Item newprev){
-// 	Item *node;
-// 	node=(Item *)malloc(sizeof(Item));
 
-// 	node->parent=newparent;
-// 	node->prev=newprev;
-// 	node->next=newnext;
-// 	node->f = node->g = node->h = (double)0.0;
-
-// 	return node;
-// }
 
 void freeItem(Item *node)
 {
@@ -43,7 +33,7 @@ void freeItem(Item *node)
 
 void initList(list_t *list_p)
 {
-	//if (list_p == NULL) list_p = malloc(sizeof(list_t));
+
 	assert(list_p);
 
 	list_p->numElements = 0;
@@ -59,20 +49,20 @@ int listCount(list_t *list)
 // return an item with corresponding board , or null
 Item *onList(list_t *list, char *board)
 {
-	Item *pitem; //pointeur de noeud
+	Item *pitem; // pointeur de noeud
 	int i, diff;
-	pitem = list->first; //pointe sur le 1er el de la liste
+	pitem = list->first; // pointe sur le 1er el de la liste
 	if (list->first == NULL)
 		return NULL;
-	for(int j=0; j<list->numElements; j++) //tant que fin liste non atteinte
+	for(int j=0; j<list->numElements; j++) // tant que fin liste non atteinte
 	{
 		i = 0;
 		diff = 0;
 
-		//compare le board de l'item au board
+		// compare le board de l'item au board
 		while (i < pitem->size && diff == 0)
 		{
-			//si different sort de la boucle
+			// si different sort de la boucle
 			if (pitem->board[i] != board[i])
 			{
 				diff = 1;
@@ -85,7 +75,7 @@ Item *onList(list_t *list, char *board)
 			return pitem;
 		pitem = pitem->next;
 	}
-	//si item non trouver
+	// si item non trouver
 	return NULL;
 }
 
@@ -93,9 +83,9 @@ Item *onList(list_t *list, char *board)
 Item *popFirst(list_t *list)
 {
 	Item *item = NULL;
-	assert(list);				//assure que la liste est non vide
-	item = list->first;			//sauvegarde le 1er el de la liste
-	delList(list, list->first); //suppr le 1er el de la liste
+	assert(list);				// assure que la liste est non vide
+	item = list->first;			// sauvegarde le 1er el de la liste
+	delList(list, list->first); // suppr le 1er el de la liste
 	return item;
 }
 
@@ -103,28 +93,25 @@ Item *popFirst(list_t *list)
 Item *popLast(list_t *list)
 {
 	Item *item = NULL;
-	assert(list);			   //assure que la liste est non vide
-	item = list->last;		   //sauvegarde le dernier el de la liste
-	delList(list, list->last); //suppr le dernier el de la liste
+	assert(list);			   // assure que la liste est non vide
+	item = list->last;		   // sauvegarde le dernier el de la liste
+	delList(list, list->last); // suppr le dernier el de la liste
 	return item;
 }
 
 // remove a node from list
 void delList(list_t *list, Item *node)
 {
-	// if(node==NULL){
-	// 	return;
-	// }
 
 	if (node == (list->first))
-	{							  //si le node à supprimmer est le 1er el de liste
-		list->first = node->next; //faire pointer le 1er el de la liste sur le suivant
-								  //(node->next)->prev=node->prev; //fait pointer le precedent du nouveau 1er el de la liste sur NULL
+	{							  // si le node à supprimmer est le 1er el de liste
+		list->first = node->next; // faire pointer le 1er el de la liste sur le suivant
+
 	}
 	else if (node == (list->last))
 	{							 //si le node à supprimmer est le dernier el de liste
 		list->last = node->prev; //faire pointer le dernier el de la liste sur le precedent
-								 //(node->prev)->next=node->next; //fait pointer le suivant du nouveau 1er el de la liste sur NULL
+
 	}
 	if (node->prev != NULL)
 	{
@@ -134,10 +121,10 @@ void delList(list_t *list, Item *node)
 	{
 		(node->next)->prev = node->prev;
 	}
-	//faire que le node pointe sur rien
+	// faire que le node pointe sur rien
 	node->next = NULL;
 	node->prev = NULL;
-	//decrementer le nbr d'el de la liste
+	// decrementer le nbr d'el de la liste
 	(list->numElements)--;
 }
 
@@ -148,7 +135,6 @@ Item *popBest(list_t *list) // and remove the best board from the list.
 
 	Item *list_min = list->first, *i = list->first;
 
-	// printf("In\n");
 
 	while (i->next)
 	{
@@ -157,8 +143,6 @@ Item *popBest(list_t *list) // and remove the best board from the list.
 			list_min = i;
 	}
 
-	// printf("Out\n");
-	// printf("Best : %e\n", list_min->f);
 	delList(list, list_min);
 	return list_min;
 }
@@ -169,17 +153,17 @@ void addFirst(list_t *list, Item *node) // add in head
 	//cas liste vide
 	if ((list->first) == NULL)
 	{
-		//mettre le node en seul el de la liste
+		// mettre le node en seul el de la liste
 		list->first = node;
 		list->last = node;
 	}
 
-	//cas liste non vide
+	// cas liste non vide
 	else
 	{
-		(list->first)->prev = node; //mettre le node devant la liste
-		node->next = list->first;	//mettre le suivant de node sur le 1er el de la liste
-		list->first = node;			//mettre node en 1er el de la liste
+		(list->first)->prev = node; // mettre le node devant la liste
+		node->next = list->first;	// mettre le suivant de node sur le 1er el de la liste
+		list->first = node;			// mettre node en 1er el de la liste
 	}
 	(list->numElements)++;
 }
@@ -187,36 +171,36 @@ void addFirst(list_t *list, Item *node) // add in head
 // add item in queue
 void addLast(list_t *list, Item *node) // add in tail
 {
-	//cas liste vide
+	// cas liste vide
 	if ((list->first) == NULL)
 	{
 		list->first = node;
 		list->last = node;
 	}
 
-	//si liste non vide
+	// si liste non vide
 	else
 	{
-		(list->last)->next = node; //contatener le node au dernier
+		(list->last)->next = node; // contatener le node au dernier
 		node->prev = list->last;   // mettre le precedent du node dernier el de ma liste
-		list->last = node;		   //placer le pointeur vers le dernier el de la liste sur node
+		list->last = node;		   // placer le pointeur vers le dernier el de la liste sur node
 	}
-	(list->numElements)++; //incrementer le nombre de el de la liste
+	(list->numElements)++; // incrementer le nombre de el de la liste
 }
 
-//fonction qui nettoie une liste
+// fonction qui nettoie une liste
 void cleanupList(list_t *list)
 {
-	Item *delnode = (list->first);					 //pointer le node à suppr premier el de la liste
-	Item *psuiv;									 //el suivant
-	while (delnode != NULL && delnode->next != NULL) //tant que l'on a pas atteint le dernier el
+	Item *delnode = (list->first);					 // pointer le node à suppr premier el de la liste
+	Item *psuiv;									 // el suivant
+	while (delnode != NULL && delnode->next != NULL) // tant que l'on a pas atteint le dernier el
 	{
-		psuiv = delnode->next;	//poser le suivant
-		delList(list, delnode); //supprimer le node
+		psuiv = delnode->next;	// poser le suivant
+		delList(list, delnode); // supprimer le node
 		freeItem(delnode);
-		delnode = psuiv; //mettre le suivant en el à suppr
+		delnode = psuiv; // mettre le suivant en el à suppr
 	}
-	//reinitialiser les valeurs de la liste
+	// reinitialiser les valeurs de la liste
 	list->first = NULL;
 	list->last = NULL;
 	list->numElements = 0;
