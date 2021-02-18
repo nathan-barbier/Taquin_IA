@@ -55,7 +55,8 @@ Ce projet est constitué de deux parties :
 | Moyen     |   26   |     161108       | ~10<sup>3</sup> s  | | Moyen     |   26   |      36801       | ~10<sup>2</sup> s  |
 | Difficile |   29   |     181065       | <10<sup>4</sup> s  | | Difficile |   29   |      84593       | <10<sup>3</sup> s  |
   
-> Dans ce cas l'algorithme **A\*** est nettement plus rapide.
+> Dans ce cas l'algorithme **A\*** est nettement plus rapide.  
+> > Ces tests ont été réalisés **dans les mêmes conditions**. [1](#foot)
 
 ---
 
