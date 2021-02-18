@@ -56,7 +56,7 @@ Ce projet est constitué de deux parties :
 | Difficile |   29   |     181065       | <10<sup>4</sup> s  | | Difficile |   29   |      84593       | <10<sup>3</sup> s  |
   
 > Dans ce cas l'algorithme **A\*** est nettement plus rapide.  
-> > Ces tests ont été réalisés **dans les mêmes conditions**. [1](#foot)
+> Ces tests ont été réalisés **dans les mêmes conditions**. [1](#foot)
 
 ---
 
