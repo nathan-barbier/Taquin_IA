@@ -49,11 +49,11 @@ Ce projet est constitué de deux parties :
 
 ### Compraison des algorithmes **(UCS vs A\*)**
 
-|    UCS    | Etapes | Noeuds parcourus | Temps | |    A*     | Etapes | Noeuds parcourus | Temps |
-| :-------: | :----: | :--------------: | :---: |-| :-------: | :----: | :--------------: | :---: |
-| Facile    |   12   |      1834        | +     | | Facile    |   12   |       109        | +++   |
-| Moyen     |   26   |     161108       | ---   | | Moyen     |   26   |      36801       | --    |
-| Difficile |   29   |     181065       | ----  | | Difficile |   29   |      84593       | ---   |
+|    UCS    | Etapes | Noeuds parcourus | Temps              | |    A*     | Etapes | Noeuds parcourus | Temps              |
+| :-------: | :----: | :--------------: | :----------------: |-| :-------: | :----: | :--------------: | :----------------: |
+| Facile    |   12   |      1834        | ~10<sup>-1</sup> s | | Facile    |   12   |       109        | <10<sup>-3</sup> s |
+| Moyen     |   26   |     161108       | ~10<sup>3</sup> s  | | Moyen     |   26   |      36801       | ~10<sup>2</sup> s  |
+| Difficile |   29   |     181065       | <10<sup>4</sup> s  | | Difficile |   29   |      84593       | <10<sup>3</sup> s  |
   
 > Dans ce cas l'algorithme **A\*** est nettement plus rapide.
 
