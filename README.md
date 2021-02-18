@@ -60,3 +60,10 @@ Ce projet est constitué de deux parties :
 ---
 
 ## Voir aussi : [***N-Queens et Déplacement Cavalier***](https://github.com/nathan-barbier/Nqueens-Knights)
+
+Réalisé en binôme avec [FABRE Mathis](https://github.com/yamana113)
+
+---
+
+<a name="foot"><sup>1</sup></a> Réalisés sur mon ordinateur personnel.
+
